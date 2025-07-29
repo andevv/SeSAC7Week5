@@ -11,7 +11,11 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        showAlert(title: "테스트", message: "Alert", ok: "배경바꾸기") {
+            print("버튼을 클릭했어요")
+            self.view.backgroundColor = .yellow
+        }
     }
 
 
