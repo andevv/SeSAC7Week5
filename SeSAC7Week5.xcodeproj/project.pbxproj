@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FEF176862E384FA80041891D /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = FEF176852E384FA80041891D /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		FEF176482E384AE10041891D /* SeSAC7Week5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeSAC7Week5.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF176852E384FA80041891D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		FEF1763F2E384AE10041891D = {
 			isa = PBXGroup;
 			children = (
+				FEF176852E384FA80041891D /* .gitignore */,
 				FEF1764A2E384AE10041891D /* SeSAC7Week5 */,
 				FEF176492E384AE10041891D /* Products */,
 			);
@@ -122,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEF176862E384FA80041891D /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
