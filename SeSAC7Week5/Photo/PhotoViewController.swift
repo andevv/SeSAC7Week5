@@ -6,18 +6,27 @@
 //
 
 import UIKit
+import SnapKit
+import Alamofire
+
+struct Photo: Decodable {
+    let id: String
+    let author: String
+    let download_url: String
+}
 
 class PhotoViewController: UIViewController {
     
-    let firstList = ["고래밥", "칙촉", "카스타드"]
-    let secondList = ["아이폰", "아이패드", "애플워치", "맥북"]
-
+    var firstList: [Photo] = []
+    var secondList: [Photo] = []
+    
     lazy var tableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .orange
         tableView.rowHeight = 80
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.allowsSelection = false
         tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: PhotoTableViewCell.identifier)
         return tableView
     }()
@@ -28,14 +37,14 @@ class PhotoViewController: UIViewController {
         tableView.rowHeight = 80
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: PhotoTableViewCell.identifier)
+        tableView.register(AuthorTableViewCell.self, forCellReuseIdentifier: AuthorTableViewCell.identifier)
         return tableView
     }()
      
     let button = {
        let view = UIButton()
         view.setTitle("통신 시작하기", for: .normal)
-        view.backgroundColor = .yellow
+        view.backgroundColor = .red
         return view
     }()
     
@@ -44,6 +53,41 @@ class PhotoViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
+        
+        let group = DispatchGroup() //enter
+        
+        group.enter()
+        self.call(url: "https://picsum.photos/v2/list?page=1") { value in
+            self.firstList.append(contentsOf: value)
+            group.leave()
+        }
+        
+        group.enter()
+        self.call(url: "https://picsum.photos/v2/list?page=2") { value in
+            self.secondList.append(contentsOf: value)
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            self.tableView.reloadData()
+            self.authorTableView.reloadData()
+        }
+    }
+    
+    func call(url: String, completionHandler: @escaping ([Photo]) -> Void) {
+        print(#function)
+        
+        AF.request(url)
+            .validate()
+            .responseDecodable(of: [Photo].self) { response in
+                
+                switch response.result {
+                case .success(let value):
+                    completionHandler(value)
+                case .failure(let error):
+                    print("fail")
+                }
+            }
     }
 }
 
@@ -59,18 +103,26 @@ extension PhotoViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: PhotoTableViewCell.identifier, for: indexPath) as! PhotoTableViewCell
-        
+
         if tableView == authorTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: AuthorTableViewCell.identifier, for: indexPath) as! AuthorTableViewCell
             let row = secondList[indexPath.row]
-            cell.titleLabel.text = row
+            cell.authorLabel.text = row.author
+            return cell
         } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: PhotoTableViewCell.identifier, for: indexPath) as! PhotoTableViewCell
             let row = firstList[indexPath.row]
-            cell.titleLabel.text = row
+            cell.titleLabel.text = row.author
+            return cell
         }
         
-        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(#function, tableView)
+        
+        let vc = DetailViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
      
 }
@@ -106,6 +158,21 @@ extension PhotoViewController {
     func configureView() {
         navigationItem.title = "통신 테스트"
         view.backgroundColor = .white
+        //버튼 클릭 시 DetailViewController Present
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    }
+    
+    @objc func buttonTapped() {
+        print(#function)
+        
+        let vc = DetailViewController()
+        vc.content = { response in
+            self.button.setTitle(response, for: .normal)
+        }
+        let nav = UINavigationController(rootViewController: vc)
+        
+        //navigationController?.pushViewController(vc, animated: true)
+        present(nav, animated: true)
     }
     
 }

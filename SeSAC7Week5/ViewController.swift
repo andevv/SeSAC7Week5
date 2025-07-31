@@ -22,8 +22,54 @@ class ViewController: UIViewController {
         //serialAsnyc()
         //concurrentAsync()
         //concurrentSync()
-        globalQualityOfService()
+        //globalQualityOfService()
+        dispatchGroupA()
     }
+    
+    //.async(group: group)
+    //동기 메서드에 적합함. 코드가 내부로 한번 더 들어가는 경우, 내부 상태는 관리하고 있지 않기 때문.
+    func dispatchGroupA() {
+        
+        let group = DispatchGroup()
+        
+        print("AAAAA")
+        DispatchQueue.global().async(group: group){
+            for i in 1...50 {
+                print(i)
+            }
+        }
+        print("BBBBB")
+        DispatchQueue.global().async(group: group){
+            for i in 51...100 {
+                print(i)
+            }
+        }
+        print("CCCCC")
+        DispatchQueue.global().async(group: group){
+            for i in 101...150 {
+                print(i)
+            }
+        }
+        print("DDDDD")
+        DispatchQueue.global().async(group: group){
+            for i in 151...200 {
+                print(i)
+            }
+        }
+        print("EEEEE")
+        
+        group.notify(queue: .main) {
+            print("작업 완료")
+        }
+    }
+    
+    func dispatchGroupB() {
+        
+    }
+    
+    
+    
+    
     
     //마지막 작업이 언제 끝날지 알기 위해서는 어떻게 해야 할까? DispatchGroup
     //여러 쓰레드 중, 더 빨리 끝났으면 하는 작업을 고를 수 있을까? QOS
