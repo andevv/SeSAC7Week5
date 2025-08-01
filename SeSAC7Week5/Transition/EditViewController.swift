@@ -24,6 +24,9 @@ class EditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "다음", style: .plain, target: self, action: #selector(rightButtonTapped))
+        
         setupUI()
         setupConstraints()
         setupActions()
@@ -31,6 +34,11 @@ class EditViewController: UIViewController {
         //textField1.text = "숫자 \(myDelegate ?? 0)을 입력했습니다."
 //        textField2.text = space
         
+    }
+    
+    @objc func rightButtonTapped() {
+        let vc = NextViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func setupUI() {
