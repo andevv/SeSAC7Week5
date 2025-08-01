@@ -10,6 +10,8 @@ import SnapKit
 
 class EditViewController: UIViewController {
     
+    var myDelegate: DataPassProtocol?
+    
     var space: ((String) -> Void)?
      
     private let textField1 = UITextField()
@@ -26,7 +28,7 @@ class EditViewController: UIViewController {
         setupConstraints()
         setupActions()
         
-//        textField1.text = space
+        //textField1.text = "숫자 \(myDelegate ?? 0)을 입력했습니다."
 //        textField2.text = space
         
     }
@@ -116,6 +118,8 @@ class EditViewController: UIViewController {
     
     @objc private func button1Tapped() {
         print("Delegate 버튼 눌림")
+        let random = Int.random(in: 1...100)
+        myDelegate?.getRandomNumber(a: random)
         navigationController?.popViewController(animated: true)
     }
     

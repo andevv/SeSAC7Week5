@@ -8,6 +8,10 @@
 import UIKit
 import SnapKit
 
+protocol DataPassProtocol {
+    func getRandomNumber(a: Int)
+}
+
 class TransitionViewController: UIViewController {
     
     private let centerButton = UIButton()
@@ -57,6 +61,10 @@ class TransitionViewController: UIViewController {
     @objc private func buttonTapped() {
         
         let vc = EditViewController()
+        
+        //타입으로서의 프로토콜 특성을 활용
+        vc.myDelegate = self
+        
         vc.space = { name in
             print("안녕하세요")
             self.centerButton.setTitle(name, for: .normal)
@@ -65,7 +73,11 @@ class TransitionViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
         
     }
-    
 
 }
 
+extension TransitionViewController: DataPassProtocol {
+    func getRandomNumber(a: Int) {
+        self.centerButton.setTitle("숫자 \(a)", for: .normal)
+    }
+}
