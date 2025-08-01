@@ -57,9 +57,15 @@ class TransitionViewController: UIViewController {
     @objc private func buttonTapped() {
         
         let vc = EditViewController()
+        vc.space = { name in
+            print("안녕하세요")
+            self.centerButton.setTitle(name, for: .normal)
+        }
         
         navigationController?.pushViewController(vc, animated: true)
         
     }
+    
+
 }
 

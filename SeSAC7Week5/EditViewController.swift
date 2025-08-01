@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 class EditViewController: UIViewController {
+    
+    var space: ((String) -> Void)?
      
     private let textField1 = UITextField()
     private let textField2 = UITextField()
@@ -23,6 +25,10 @@ class EditViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupActions()
+        
+//        textField1.text = space
+//        textField2.text = space
+        
     }
     
     private func setupUI() {
@@ -115,6 +121,7 @@ class EditViewController: UIViewController {
     
     @objc private func button2Tapped() {
         print("Closure 버튼 눌림")
+        space?(textField2.text!)
         navigationController?.popViewController(animated: true)
     }
     
